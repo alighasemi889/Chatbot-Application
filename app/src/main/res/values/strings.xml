@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">دستیار هوشمند</string>
+    <string name="hint">سوال خود را بنویسید…</string>
+    <string name="send">ارسال</string>
+    <string name="settings">تنظیمات</string>
+    <string name="save">ذخیره</string>
+    <string name="cancel">انصراف</string>
+    <string name="welcome">سلام! من دستیار هوشمند شما هستم. هر سوالی دارید بپرسید.</string>
+    <string name="typing">در حال نوشتن…</string>
+    <string name="credit">نوشته شده توسط مهیار محمد ابراهیمی و علی قاسمی</string>
+    <string name="api_url">آدرس API</string>
+    <string name="api_key">کلید API</string>
+    <string name="model">نام مدل</string>
+    <string name="demo_reply">این یک پاسخ آزمایشی است. برای دریافت پاسخ واقعی، از منوی تنظیمات کلید API را وارد کنید.\n\nسوال شما: %s</string>
+</resources>

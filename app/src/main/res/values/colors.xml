@@ -1,0 +1,9 @@
+<resources>
+    <color name="primary">#10A37F</color>
+    <color name="primary_dark">#0B7A5F</color>
+    <color name="bg">#F4F6F8</color>
+    <color name="user_bubble">#10A37F</color>
+    <color name="bot_bubble">#FFFFFF</color>
+    <color name="text_dark">#202123</color>
+    <color name="text_muted">#6B7280</color>
+</resources>

@@ -1,16 +1,75 @@
 name: Build APK
-on: [push, workflow_dispatch]
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: 17 }
+        with:
+          distribution: temurin
+          java-version: 17
+
       - uses: gradle/actions/setup-gradle@v4
-        with: { gradle-version: 8.7 }
-      - run: gradle assembleDebug
-      - uses: actions/upload-artifact@v4
+        with:
+          gradle-version: 8.7
+
+      # Always build debug APK
+      - name: Build Debug APK
+        run: gradle assembleDebug
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/*.apk
+
+      # On tags: build release APK and create GitHub Release
+      - name: Build Release APK
+        if: startsWith(github.ref, 'refs/tags/')
+        run: gradle assembleRelease
+
+      - name: Upload Release APK
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: app/build/outputs/apk/release/*.apk
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Chatbot Application ${{ github.ref_name }}
+          body: |
+            ## Chatbot Application ${{ github.ref_name }}
+
+            اولین نسخه عمومی اپلیکیشن چت‌بات اندروید.
+
+            ### ویژگی‌ها
+            - رابط چت تمیز با حباب پیام
+            - ارسال کامل تاریخچه مکالمه به مدل
+            - نشانگر "در حال تایپ…"
+            - پشتیبانی کامل از راست‌چین (RTL) و متن فارسی
+            - تنظیم API URL، کلید و مدل از داخل اپ
+            - حالت دمو (بدون نیاز به API key کار می‌کند)
+
+            ### دانلود و نصب
+            فایل APK را دانلود کرده و روی گوشی اندروید خود نصب کنید (اندروید ۷ به بالا).
+
+            > این نسخه با کلید دیباگ امضا شده تا نصب آن آسان باشد.
+          files: app/build/outputs/apk/release/*.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

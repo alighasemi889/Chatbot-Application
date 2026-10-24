@@ -93,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
         sendBtn.setEnabled(false);
 
         final List<Message> history = new ArrayList<>(messages.subList(0, messages.size() - 1));
-        final String url = prefs.getString("url", DEFAULT_URL);
-        final String key = prefs.getString("key", DEFAULT_KEY);
-        final String model = prefs.getString("model", DEFAULT_MODEL);
+        final String url = getSetting("url", DEFAULT_URL);
+        final String key = getSetting("key", DEFAULT_KEY);
+        final String model = getSetting("model", DEFAULT_MODEL);
 
         executor.execute(() -> {
             String reply;
@@ -113,6 +113,12 @@ public class MainActivity extends AppCompatActivity {
                 ChatStore.saveConversation(this, conversationId, messages);
             });
         });
+    }
+
+    /** Returns the saved value, or the built-in default if nothing non-empty was saved. */
+    private String getSetting(String name, String fallback) {
+        String saved = prefs.getString(name, "");
+        return saved.trim().isEmpty() ? fallback : saved.trim();
     }
 
     private void scrollToEnd() {
@@ -163,9 +169,9 @@ public class MainActivity extends AppCompatActivity {
         final EditText etUrl = v.findViewById(R.id.et_url);
         final EditText etKey = v.findViewById(R.id.et_key);
         final EditText etModel = v.findViewById(R.id.et_model);
-        etUrl.setText(prefs.getString("url", DEFAULT_URL));
-        etKey.setText(prefs.getString("key", DEFAULT_KEY));
-        etModel.setText(prefs.getString("model", DEFAULT_MODEL));
+        etUrl.setText(getSetting("url", DEFAULT_URL));
+        etKey.setText(getSetting("key", DEFAULT_KEY));
+        etModel.setText(getSetting("model", DEFAULT_MODEL));
 
         new AlertDialog.Builder(this)
                 .setTitle(R.string.settings)

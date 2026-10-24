@@ -34,4 +34,12 @@
     <string name="confirm_delete">این گفتگو حذف شود؟</string>
     <string name="light_mode">حالت روشن</string>
     <string name="copied">متن پیام کپی شد</string>
+    <string name="tasks">تسک‌ها</string>
+    <string name="add_task">افزودن تسک</string>
+    <string name="task_title_hint">عنوان تسک</string>
+    <string name="next">بعدی</string>
+    <string name="no_tasks">هنوز تسکی ثبت نشده است</string>
+    <string name="task_past">زمان انتخاب‌شده گذشته است</string>
+    <string name="confirm_delete_task">این تسک حذف شود؟</string>
+    <string name="notification_title">یادآور تسک</string>
 </resources>

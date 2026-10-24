@@ -2,6 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_new_chat" android:title="@string/new_chat"
         app:showAsAction="never" />
+    <item android:id="@+id/action_tasks" android:title="@string/tasks"
+        app:showAsAction="never" />
     <item android:id="@+id/action_history" android:title="@string/history"
         app:showAsAction="never" />
     <item android:id="@+id/action_theme" android:title="@string/dark_mode"

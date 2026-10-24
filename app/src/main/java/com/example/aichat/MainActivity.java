@@ -152,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
             return true;
+        } else if (item.getItemId() == R.id.action_tasks) {
+            startActivity(new Intent(this, TaskActivity.class));
+            return true;
         } else if (item.getItemId() == R.id.action_history) {
             startActivity(new Intent(this, HistoryActivity.class));
             return true;

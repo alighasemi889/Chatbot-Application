@@ -53,6 +53,14 @@
         android:textStyle="bold"
         android:layout_marginBottom="20dp" />
 
+    <Button
+        android:id="@+id/btn_biometric"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/login_biometric"
+        android:visibility="gone"
+        android:layout_marginBottom="20dp" />
+
     <TextView
         android:id="@+id/toggle_register"
         android:layout_width="match_parent"

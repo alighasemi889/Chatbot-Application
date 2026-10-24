@@ -15,8 +15,13 @@ import java.util.List;
 /** Minimal client for OpenAI-compatible chat completion endpoints. */
 public class ApiClient {
 
+    static final String SYSTEM_PROMPT =
+            "تو یک دستیار هوشمند فارسی‌زبان هستی. همیشه به زبان کاربر پاسخ بده، " +
+            "پاسخ‌ها را روشن و مختصر بنویس، و اگر چیزی را نمی‌دانی صادقانه بگو.";
+
     public static String chat(String url, String key, String model, List<Message> history) throws Exception {
         JSONArray msgs = new JSONArray();
+        msgs.put(new JSONObject().put("role", "system").put("content", SYSTEM_PROMPT));
         for (Message m : history) {
             msgs.put(new JSONObject()
                     .put("role", m.fromUser ? "user" : "assistant")

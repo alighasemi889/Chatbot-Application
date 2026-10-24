@@ -32,6 +32,11 @@ public class UserManager {
         return prefs.getString(PREF_CURRENT_USER, null);
     }
 
+    public static void setCurrentUser(Context ctx, String username) {
+        SharedPreferences prefs = ctx.getSharedPreferences("users", Context.MODE_PRIVATE);
+        prefs.edit().putString(PREF_CURRENT_USER, username).apply();
+    }
+
     public static void logout(Context ctx) {
         SharedPreferences prefs = ctx.getSharedPreferences("users", Context.MODE_PRIVATE);
         prefs.edit().remove(PREF_CURRENT_USER).apply();

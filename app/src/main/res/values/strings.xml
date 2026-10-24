@@ -42,4 +42,13 @@
     <string name="task_past">زمان انتخاب‌شده گذشته است</string>
     <string name="confirm_delete_task">این تسک حذف شود؟</string>
     <string name="notification_title">یادآور تسک</string>
+    <string name="login_biometric">ورود با اثر انگشت</string>
+    <string name="enable_biometric_q">ورود با اثر انگشت برای این حساب فعال شود؟</string>
+    <string name="biometric_prompt_title">ورود با اثر انگشت</string>
+    <string name="biometric_prompt_sub">برای ورود، اثر انگشت خود را تأیید کنید</string>
+    <string name="yes">بله</string>
+    <string name="no">خیر</string>
+    <string name="biometric_failed">احراز هویت انجام نشد</string>
+    <string name="biometric_no_user">ابتدا یک بار با نام کاربری و رمز وارد شوید</string>
+    <string name="system_prompt_info">دستیار فارسی‌زبان و مختصر</string>
 </resources>

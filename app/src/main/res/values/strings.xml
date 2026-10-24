@@ -33,4 +33,5 @@
     <string name="delete_chat">حذف</string>
     <string name="confirm_delete">این گفتگو حذف شود؟</string>
     <string name="light_mode">حالت روشن</string>
+    <string name="copied">متن پیام کپی شد</string>
 </resources>

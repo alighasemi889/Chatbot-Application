@@ -12,4 +12,18 @@
     <string name="api_key">کلید API</string>
     <string name="model">نام مدل</string>
     <string name="demo_reply">این یک پاسخ آزمایشی است. برای دریافت پاسخ واقعی، از منوی تنظیمات کلید API را وارد کنید.\n\nسوال شما: %s</string>
+    <string name="logout">خروج</string>
+    <string name="login">ورود</string>
+    <string name="register">ثبت نام</string>
+    <string name="username">نام کاربری</string>
+    <string name="password">رمز عبور</string>
+    <string name="confirm_password">تأیید رمز عبور</string>
+    <string name="already_have_account">حساب دارید؟ <b>وارد شوید</b></string>
+    <string name="no_account">حساب ندارید؟ <b>ثبت نام کنید</b></string>
+    <string name="password_mismatch">رمزهای عبور مطابقت ندارند</string>
+    <string name="empty_field">لطفاً همه فیلدها را پر کنید</string>
+    <string name="user_exists">این نام کاربری قبلاً ثبت شده است</string>
+    <string name="invalid_login">نام کاربری یا رمز عبور اشتباه است</string>
+    <string name="dark_mode">حالت تیره</string>
+    <string name="theme">پوسته</string>
 </resources>

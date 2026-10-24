@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="?android:attr/colorBackground"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -29,7 +29,8 @@
             android:inputType="textMultiLine"
             android:maxLines="4"
             android:paddingHorizontal="16dp"
-            android:paddingVertical="10dp" />
+            android:paddingVertical="10dp"
+            android:textColor="?android:attr/textColorPrimary" />
         <Button
             android:id="@+id/send"
             android:layout_width="wrap_content"
@@ -46,6 +47,6 @@
         android:gravity="center"
         android:paddingBottom="8dp"
         android:text="@string/credit"
-        android:textColor="@color/text_muted"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="12sp" />
 </LinearLayout>

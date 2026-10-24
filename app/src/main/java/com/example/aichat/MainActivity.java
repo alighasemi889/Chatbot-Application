@@ -1,5 +1,6 @@
 package com.example.aichat;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +21,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String DEFAULT_URL = "https://api.openai.com/v1/chat/completions";
+    private static final String DEFAULT_URL = "https://api.together.ai/v1/chat/completions";
+    private static final String DEFAULT_KEY = "dahl_GxSwCZGe12r1uaSCESZF9cdrRhKKoVkw9";
+    private static final String DEFAULT_MODEL = "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo";
+    
     private final List<Message> messages = new ArrayList<>();
     private ChatAdapter adapter;
     private RecyclerView recycler;
@@ -33,7 +37,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeManager.apply(this);
+        
+        // Check login
+        String currentUser = UserManager.getCurrentUser(this);
+        if (currentUser == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
+        setTitle(getString(R.string.app_name) + " (" + currentUser + ")");
         prefs = getSharedPreferences("settings", MODE_PRIVATE);
 
         recycler = findViewById(R.id.recycler);
@@ -66,18 +81,13 @@ public class MainActivity extends AppCompatActivity {
 
         final List<Message> history = new ArrayList<>(messages.subList(0, messages.size() - 1));
         final String url = prefs.getString("url", DEFAULT_URL);
-        final String key = prefs.getString("key", "");
-        final String model = prefs.getString("model", "gpt-4o-mini");
+        final String key = prefs.getString("key", DEFAULT_KEY);
+        final String model = prefs.getString("model", DEFAULT_MODEL);
 
         executor.execute(() -> {
             String reply;
             try {
-                if (key.isEmpty()) {
-                    Thread.sleep(700);
-                    reply = getString(R.string.demo_reply, q);
-                } else {
-                    reply = ApiClient.chat(url, key, model, history);
-                }
+                reply = ApiClient.chat(url, key, model, history);
             } catch (Exception e) {
                 reply = "خطا: " + e.getMessage();
             }
@@ -106,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_settings) {
             showSettings();
             return true;
+        } else if (item.getItemId() == R.id.action_theme) {
+            ThemeManager.toggle(this);
+            return true;
+        } else if (item.getItemId() == R.id.action_logout) {
+            UserManager.logout(this);
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -116,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
         final EditText etKey = v.findViewById(R.id.et_key);
         final EditText etModel = v.findViewById(R.id.et_model);
         etUrl.setText(prefs.getString("url", DEFAULT_URL));
-        etKey.setText(prefs.getString("key", ""));
-        etModel.setText(prefs.getString("model", "gpt-4o-mini"));
+        etKey.setText(prefs.getString("key", DEFAULT_KEY));
+        etModel.setText(prefs.getString("model", DEFAULT_MODEL));
 
         new AlertDialog.Builder(this)
                 .setTitle(R.string.settings)

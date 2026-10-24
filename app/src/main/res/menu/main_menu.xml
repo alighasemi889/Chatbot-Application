@@ -1,7 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_theme" android:title="@string/dark_mode"
+    <item android:id="@+id/action_new_chat" android:title="@string/new_chat"
         app:showAsAction="never" />
+    <item android:id="@+id/action_history" android:title="@string/history"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_theme" android:title="@string/dark_mode"
+        app:showAsAction="ifRoom" />
     <item android:id="@+id/action_settings" android:title="@string/settings"
         app:showAsAction="never" />
     <item android:id="@+id/action_logout" android:title="@string/logout"

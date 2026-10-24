@@ -26,4 +26,11 @@
     <string name="invalid_login">نام کاربری یا رمز عبور اشتباه است</string>
     <string name="dark_mode">حالت تیره</string>
     <string name="theme">پوسته</string>
+    <string name="new_chat">گفتگوی جدید</string>
+    <string name="history">تاریخچه گفتگوها</string>
+    <string name="no_history">هنوز گفتگویی ذخیره نشده است</string>
+    <string name="untitled">گفتگوی بدون عنوان</string>
+    <string name="delete_chat">حذف</string>
+    <string name="confirm_delete">این گفتگو حذف شود؟</string>
+    <string name="light_mode">حالت روشن</string>
 </resources>

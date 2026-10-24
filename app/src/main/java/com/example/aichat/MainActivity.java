@@ -17,10 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String EXTRA_CONVERSATION_ID = "conversation_id";
     private static final String DEFAULT_URL = "https://api.together.ai/v1/chat/completions";
     private static final String DEFAULT_KEY = "dahl_GxSwCZGe12r1uaSCESZF9cdrRhKKoVkw9";
     private static final String DEFAULT_MODEL = "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo";
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler ui = new Handler(Looper.getMainLooper());
+    private String conversationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +64,18 @@ public class MainActivity extends AppCompatActivity {
         recycler.setLayoutManager(lm);
         recycler.setAdapter(adapter);
 
-        messages.add(new Message(getString(R.string.welcome), false));
-        adapter.notifyItemInserted(0);
+        conversationId = getIntent().getStringExtra(EXTRA_CONVERSATION_ID);
+        if (conversationId == null) {
+            conversationId = UUID.randomUUID().toString();
+            getIntent().putExtra(EXTRA_CONVERSATION_ID, conversationId);
+        }
+        List<Message> saved = ChatStore.loadMessages(this, conversationId);
+        if (!saved.isEmpty()) {
+            messages.addAll(saved);
+        } else {
+            messages.add(new Message(getString(R.string.welcome), false));
+        }
+        adapter.notifyDataSetChanged();
 
         sendBtn.setOnClickListener(v -> send());
     }
@@ -97,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyItemChanged(messages.indexOf(typing));
                 sendBtn.setEnabled(true);
                 scrollToEnd();
+                ChatStore.saveConversation(this, conversationId, messages);
             });
         });
     }
@@ -112,12 +126,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem theme = menu.findItem(R.id.action_theme);
+        if (theme != null) {
+            theme.setTitle(ThemeManager.isDarkMode(this) ? R.string.light_mode : R.string.dark_mode);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
             showSettings();
             return true;
         } else if (item.getItemId() == R.id.action_theme) {
             ThemeManager.toggle(this);
+            return true;
+        } else if (item.getItemId() == R.id.action_new_chat) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_history) {
+            startActivity(new Intent(this, HistoryActivity.class));
             return true;
         } else if (item.getItemId() == R.id.action_logout) {
             UserManager.logout(this);

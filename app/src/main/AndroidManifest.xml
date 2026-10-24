@@ -12,6 +12,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".HistoryActivity" />
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize" />
     </application>
 </manifest>

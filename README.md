@@ -86,3 +86,13 @@ Written by **Mahyar Mohammad Ebrahimi** and **Ali Ghasemi**.
 ## License
 
 Released under the [MIT License](LICENSE).
+
+---
+
+## Download Latest Release
+
+Visit the [**Releases**](https://github.com/alighasemi889/Chatbot-Application/releases) page to download the latest `app-debug.apk`.
+
+Alternatively, get a fresh APK from the latest successful **Actions** build:
+1. Go to **Actions** → latest successful workflow run
+2. Download the **app-debug** artifact (zip containing the APK)

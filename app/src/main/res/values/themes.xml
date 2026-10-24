@@ -1,7 +1,8 @@
 <resources>
-    <style name="Theme.AIChat" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.AIChat" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/primary</item>
+        <item name="android:windowBackground">@color/bg_light</item>
     </style>
 </resources>

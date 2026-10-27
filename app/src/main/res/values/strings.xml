@@ -57,4 +57,17 @@
     <string name="save_answer">☆ ذخیره</string>
     <string name="saved_mark">★ ذخیره شده</string>
     <string name="ok">باشه</string>
+    <string name="about_app">درباره و به‌روزرسانی</string>
+    <string name="current_version">نسخه فعلی: %s</string>
+    <string name="check_update">بررسی به‌روزرسانی</string>
+    <string name="checking">در حال بررسی…</string>
+    <string name="up_to_date">از آخرین نسخه استفاده می‌کنید</string>
+    <string name="no_release">نسخه‌ای برای دانلود پیدا نشد</string>
+    <string name="check_failed">بررسی انجام نشد: %s</string>
+    <string name="update_available">نسخه %s موجود است. دانلود و نصب شود؟</string>
+    <string name="download_install">دانلود و نصب</string>
+    <string name="later">بعداً</string>
+    <string name="downloading">در حال دانلود… %d%%</string>
+    <string name="allow_install">برای نصب، اجازه نصب از این برنامه را فعال کنید و دوباره تلاش کنید</string>
+    <string name="install_failed">نصب انجام نشد: %s</string>
 </resources>

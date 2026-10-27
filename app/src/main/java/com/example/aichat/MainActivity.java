@@ -1,13 +1,11 @@
 package com.example.aichat;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -20,15 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_CONVERSATION_ID = "conversation_id";
-    private static final String DEFAULT_URL = "https://api.together.ai/v1/chat/completions";
-    // کلید API در کد نوشته نمی‌شود؛ کاربر آن را در تنظیمات وارد می‌کند.
-    private static final String DEFAULT_KEY = "";
-    private static final String DEFAULT_MODEL = "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo";
 
     private static final String[] SUGGESTIONS = {
             "برنامه‌نویسی را برایم توضیح بده",
@@ -41,11 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ChatAdapter adapter;
     private RecyclerView recycler;
     private EditText input;
-    private View sendBtn;
     private LinearLayout chips;
-    private SharedPreferences prefs;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Handler ui = new Handler(Looper.getMainLooper());
     private String conversationId;
 
     @Override
@@ -62,14 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         setTitle(getString(R.string.app_name) + " (" + currentUser + ")");
-        prefs = getSharedPreferences("settings", MODE_PRIVATE);
 
         recycler = findViewById(R.id.recycler);
         input = findViewById(R.id.input);
-        sendBtn = findViewById(R.id.send);
         chips = findViewById(R.id.chips);
+        Button sendBtn = findViewById(R.id.send);
 
-        // شناسه گفتگو باید قبل از ساخت adapter مشخص شود
         conversationId = getIntent().getStringExtra(EXTRA_CONVERSATION_ID);
         if (conversationId == null) {
             conversationId = UUID.randomUUID().toString();
@@ -94,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         buildSuggestionChips();
     }
 
-    /** پیشنهادهای آماده فقط وقتی نمایش داده می‌شوند که هنوز پیامی از کاربر نیامده باشد. */
+    /** Suggestion chips are shown only before the user has sent any message. */
     private void buildSuggestionChips() {
         chips.removeAllViews();
         boolean hasUserMessage = false;
@@ -111,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
             Button b = new Button(this);
             b.setText(s);
             b.setAllCaps(false);
+            b.setTextColor(0xFFFFFFFF);
+            b.setBackgroundResource(R.drawable.glass_button);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0, 6, 0, 6);
+            b.setLayoutParams(lp);
             b.setOnClickListener(v -> {
                 input.setText(s);
                 send();
@@ -119,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /** Answers from the local knowledge base. No external API is called. */
     private void send() {
         final String q = input.getText().toString().trim();
         if (q.isEmpty()) return;
@@ -126,42 +119,11 @@ public class MainActivity extends AppCompatActivity {
         chips.setVisibility(View.GONE);
 
         messages.add(new Message(q, true));
-        final Message typing = new Message(getString(R.string.typing), false);
-        messages.add(typing);
+        messages.add(new Message(KnowledgeBase.answer(q), false));
         adapter.notifyItemRangeInserted(messages.size() - 2, 2);
-        scrollToEnd();
-        sendBtn.setEnabled(false);
-
-        final List<Message> history = new ArrayList<>(messages.subList(0, messages.size() - 1));
-        final String url = getSetting("url", DEFAULT_URL);
-        final String key = getSetting("key", DEFAULT_KEY);
-        final String model = getSetting("model", DEFAULT_MODEL);
-
-        executor.execute(() -> {
-            String reply;
-            try {
-                reply = ApiClient.chat(url, key, model, history);
-            } catch (Exception e) {
-                reply = "خطا: " + e.getMessage();
-            }
-            final String finalReply = reply;
-            ui.post(() -> {
-                typing.text = finalReply;
-                adapter.notifyItemChanged(messages.indexOf(typing));
-                sendBtn.setEnabled(true);
-                scrollToEnd();
-                ChatStore.saveConversation(this, conversationId, messages);
-            });
-        });
-    }
-
-    private String getSetting(String name, String fallback) {
-        String saved = prefs.getString(name, "");
-        return saved.trim().isEmpty() ? fallback : saved.trim();
-    }
-
-    private void scrollToEnd() {
         recycler.scrollToPosition(messages.size() - 1);
+
+        ChatStore.saveConversation(this, conversationId, messages);
     }
 
     @Override
@@ -182,10 +144,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            showSettings();
-            return true;
-        } else if (id == R.id.action_theme) {
+        if (id == R.id.action_theme) {
             ThemeManager.toggle(this);
             return true;
         } else if (id == R.id.action_new_chat) {
@@ -197,6 +156,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_saved) {
             showSavedAnswers();
+            return true;
+        } else if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
             return true;
         } else if (id == R.id.action_tasks) {
             startActivity(new Intent(this, TaskActivity.class));
@@ -244,32 +206,5 @@ public class MainActivity extends AppCompatActivity {
                 .setItems(labels, null)
                 .setPositiveButton(R.string.ok, null)
                 .show();
-    }
-
-    private void showSettings() {
-        View v = getLayoutInflater().inflate(R.layout.dialog_settings, null);
-        final EditText etUrl = v.findViewById(R.id.et_url);
-        final EditText etKey = v.findViewById(R.id.et_key);
-        final EditText etModel = v.findViewById(R.id.et_model);
-        etUrl.setText(getSetting("url", DEFAULT_URL));
-        etKey.setText(getSetting("key", DEFAULT_KEY));
-        etModel.setText(getSetting("model", DEFAULT_MODEL));
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.settings)
-                .setView(v)
-                .setPositiveButton(R.string.save, (d, w) -> prefs.edit()
-                        .putString("url", etUrl.getText().toString().trim())
-                        .putString("key", etKey.getText().toString().trim())
-                        .putString("model", etModel.getText().toString().trim())
-                        .apply())
-                .setNegativeButton(R.string.cancel, null)
-                .show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        executor.shutdownNow();
     }
 }

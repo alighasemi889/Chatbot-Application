@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="@drawable/bg_glass_gradient"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -37,13 +37,14 @@
             android:maxLines="4"
             android:paddingHorizontal="16dp"
             android:paddingVertical="10dp"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#B3FFFFFF" />
         <Button
             android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:backgroundTint="@color/primary"
+            android:background="@drawable/glass_button"
             android:text="@string/send"
             android:textColor="#FFFFFF" />
     </LinearLayout>
@@ -54,6 +55,6 @@
         android:gravity="center"
         android:paddingBottom="8dp"
         android:text="@string/credit"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="#B3FFFFFF"
         android:textSize="12sp" />
 </LinearLayout>

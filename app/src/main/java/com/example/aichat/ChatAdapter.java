@@ -67,7 +67,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
         } else {
             h.root.setGravity(Gravity.START);
             h.text.setBackgroundResource(R.drawable.bubble_bot);
-            h.text.setTextColor(ctx.getColor(R.color.text_dark));
+            h.text.setTextColor(ctx.getColor(R.color.text_light));
 
             boolean placeholder = m.text.equals(ctx.getString(R.string.typing))
                     || m.text.equals(ctx.getString(R.string.welcome));

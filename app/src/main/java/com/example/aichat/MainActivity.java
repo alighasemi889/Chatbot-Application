@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         buildSuggestionChips();
     }
 
-    /** Suggestion chips are shown only before the user has sent any message. */
+    /** Home screen: welcome title and four topic cards. Shown only before the first user message. */
     private void buildSuggestionChips() {
         chips.removeAllViews();
         boolean hasUserMessage = false;
@@ -93,22 +94,62 @@ public class MainActivity extends AppCompatActivity {
         chips.setVisibility(hasUserMessage ? View.GONE : View.VISIBLE);
         if (hasUserMessage) return;
 
-        for (String s : SUGGESTIONS) {
-            Button b = new Button(this);
-            b.setText(s);
-            b.setAllCaps(false);
-            b.setTextColor(0xFFFFFFFF);
-            b.setBackgroundResource(R.drawable.glass_button);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 6, 0, 6);
-            b.setLayoutParams(lp);
-            b.setOnClickListener(v -> {
-                input.setText(s);
-                send();
-            });
-            chips.addView(b);
-        }
+        TextView title = new TextView(this);
+        title.setText("امروز چی یاد بگیریم؟");
+        title.setTextColor(0xFFF2F2F5);
+        title.setTextSize(22);
+        title.setTypeface(null, android.graphics.Typeface.BOLD);
+        title.setPadding(dp(8), dp(8), dp(8), 0);
+        chips.addView(title);
+
+        TextView sub = new TextView(this);
+        sub.setText("سؤالت رو بپرس یا یکی از مسیرهای زیر رو انتخاب کن.");
+        sub.setTextColor(0xFFB3B8C6);
+        sub.setTextSize(14);
+        sub.setPadding(dp(8), dp(4), dp(8), dp(4));
+        chips.addView(sub);
+
+        addCard("برنامه‌نویسی", "از مبانی تا ساخت پروژه واقعی", "برنامه‌نویسی را برایم توضیح بده");
+        addCard("امنیت سایبری", "امنیت اطلاعات و مفاهیم پایه", "امنیت سایبری چیست");
+        addCard("هوش مصنوعی", "از Python تا یادگیری ماشین", "هوش مصنوعی چیست");
+        addCard("کلود و دواپس", "سرور، استقرار و خودکارسازی", "دواپس چیست");
+    }
+
+    private void addCard(String title, String desc, String query) {
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setBackgroundResource(R.drawable.glass_surface);
+        card.setPadding(dp(16), dp(14), dp(16), dp(14));
+
+        TextView t = new TextView(this);
+        t.setText(title);
+        t.setTextColor(0xFFF2F2F5);
+        t.setTextSize(16);
+        t.setTypeface(null, android.graphics.Typeface.BOLD);
+
+        TextView d = new TextView(this);
+        d.setText(desc);
+        d.setTextColor(0xFFB3B8C6);
+        d.setTextSize(13);
+
+        card.addView(t);
+        card.addView(d);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(dp(4), dp(6), dp(4), dp(6));
+        card.setLayoutParams(lp);
+        card.setClickable(true);
+        card.setFocusable(true);
+        card.setOnClickListener(v -> {
+            input.setText(query);
+            send();
+        });
+        chips.addView(card);
+    }
+
+    private int dp(int v) {
+        return Math.round(v * getResources().getDisplayMetrics().density);
     }
 
     /** Answers from the local knowledge base. No external API is called. */

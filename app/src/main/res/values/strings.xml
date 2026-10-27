@@ -51,4 +51,10 @@
     <string name="biometric_failed">احراز هویت انجام نشد</string>
     <string name="biometric_no_user">ابتدا یک بار با نام کاربری و رمز وارد شوید</string>
     <string name="system_prompt_info">دستیار فارسی‌زبان و مختصر</string>
+    <string name="rename_chat">تغییر نام گفتگو</string>
+    <string name="saved_answers">پاسخ‌های ذخیره‌شده</string>
+    <string name="no_saved">هنوز پاسخی ذخیره نشده است</string>
+    <string name="save_answer">☆ ذخیره</string>
+    <string name="saved_mark">★ ذخیره شده</string>
+    <string name="ok">باشه</string>
 </resources>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="@drawable/bg_glass_gradient"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -12,6 +12,18 @@
         android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingVertical="8dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="320dp">
+        <LinearLayout
+            android:id="@+id/chips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp" />
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,23 +42,114 @@
             android:maxLines="4"
             android:paddingHorizontal="16dp"
             android:paddingVertical="10dp"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#B3FFFFFF" />
         <Button
             android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:backgroundTint="@color/primary"
+            android:background="@drawable/glass_button"
             android:text="@string/send"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 
-    <TextView
+    <!-- فوتر: دسترسی سریع به بخش‌ها -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp"
+        android:paddingTop="4dp">
+        <Button
+            android:id="@+id/btn_footer_new"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/glass_button"
+            android:minHeight="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="گفتگوی جدید"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+        <Button
+            android:id="@+id/btn_footer_history"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/glass_button"
+            android:minHeight="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="تاریخچه"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+        <Button
+            android:id="@+id/btn_footer_learning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/glass_button"
+            android:minHeight="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="مسیر یادگیری"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+        <Button
+            android:id="@+id/btn_footer_tasks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/glass_button"
+            android:minHeight="0dp"
+            android:paddingHorizontal="2dp"
+            android:text="تسک‌ها"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingBottom="8dp"
-        android:text="@string/credit"
-        android:textColor="?android:attr/textColorSecondary"
-        android:textSize="12sp" />
+        android:orientation="horizontal"
+        android:paddingBottom="6dp"
+        android:paddingTop="4dp">
+        <TextView
+            android:id="@+id/link_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="درباره با ما"
+            android:textColor="#B3FFFFFF"
+            android:textSize="12sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="•"
+            android:textColor="#66FFFFFF" />
+        <TextView
+            android:id="@+id/link_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="درباره برنامه"
+            android:textColor="#B3FFFFFF"
+            android:textSize="12sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="•"
+            android:textColor="#66FFFFFF" />
+        <TextView
+            android:id="@+id/link_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="درباره مدل"
+            android:textColor="#B3FFFFFF"
+            android:textSize="12sp" />
+    </LinearLayout>
 </LinearLayout>

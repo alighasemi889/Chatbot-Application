@@ -18,19 +18,23 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
     private final List<Message> items;
+    private final String conversationId;
 
-    public ChatAdapter(List<Message> items) {
+    public ChatAdapter(List<Message> items, String conversationId) {
         this.items = items;
+        this.conversationId = conversationId;
     }
 
     static class VH extends RecyclerView.ViewHolder {
         final LinearLayout root;
         final TextView text;
+        final TextView save;
 
         VH(View v) {
             super(v);
             root = v.findViewById(R.id.root);
             text = v.findViewById(R.id.text);
+            save = v.findViewById(R.id.save_btn);
         }
     }
 
@@ -43,24 +47,45 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH h, int position) {
-        Message m = items.get(position);
+        final Message m = items.get(position);
+        final Context ctx = h.itemView.getContext();
         h.text.setText(m.text);
         h.text.setOnLongClickListener(v -> {
-            ClipboardManager cm = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipboardManager cm = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
             if (cm != null) {
                 cm.setPrimaryClip(ClipData.newPlainText("message", m.text));
-                Toast.makeText(v.getContext(), R.string.copied, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx, R.string.copied, Toast.LENGTH_SHORT).show();
             }
             return true;
         });
+
         if (m.fromUser) {
             h.root.setGravity(Gravity.END);
             h.text.setBackgroundResource(R.drawable.bubble_user);
             h.text.setTextColor(0xFFFFFFFF);
+            h.save.setVisibility(View.GONE);
         } else {
             h.root.setGravity(Gravity.START);
             h.text.setBackgroundResource(R.drawable.bubble_bot);
-            h.text.setTextColor(h.itemView.getContext().getColor(R.color.text_dark));
+            h.text.setTextColor(ctx.getColor(R.color.text_light));
+
+            boolean placeholder = m.text.equals(ctx.getString(R.string.typing))
+                    || m.text.equals(ctx.getString(R.string.welcome));
+            if (placeholder) {
+                h.save.setVisibility(View.GONE);
+            } else {
+                h.save.setVisibility(View.VISIBLE);
+                h.save.setText(ChatStore.isSaved(ctx, m.text)
+                        ? R.string.saved_mark : R.string.save_answer);
+                h.save.setOnClickListener(v -> {
+                    if (ChatStore.isSaved(ctx, m.text)) {
+                        ChatStore.removeSaved(ctx, m.text);
+                    } else {
+                        ChatStore.saveAnswer(ctx, conversationId, m.text);
+                    }
+                    notifyItemChanged(h.getBindingAdapterPosition());
+                });
+            }
         }
     }
 

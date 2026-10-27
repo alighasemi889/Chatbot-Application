@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <application
@@ -19,5 +20,17 @@
         <activity android:name=".TaskActivity" />
         <receiver android:name=".ReminderReceiver" android:exported="false" />
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize" />
+            <activity android:name=".AboutActivity" />
+        <activity android:name=".LearningActivity" />
+        <activity android:name=".QuizActivity" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 </manifest>

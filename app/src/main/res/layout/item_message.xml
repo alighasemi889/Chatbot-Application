@@ -3,9 +3,10 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:paddingHorizontal="12dp"
     android:paddingVertical="4dp">
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
@@ -15,4 +16,13 @@
         android:textSize="15sp"
         android:textIsSelectable="true"
         android:lineSpacingMultiplier="1.15" />
+
+    <TextView
+        android:id="@+id/save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:textSize="12sp"
+        android:textColor="?android:attr/colorAccent"
+        android:visibility="gone" />
 </LinearLayout>

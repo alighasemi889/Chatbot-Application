@@ -1,5 +1,6 @@
 package com.example.aichat;
 
+import androidx.appcompat.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,6 +79,39 @@ public class MainActivity extends AppCompatActivity {
 
         sendBtn.setOnClickListener(v -> send());
         buildSuggestionChips();
+        bindFooter();
+    }
+
+    private void bindFooter() {
+        ((Button) findViewById(R.id.btn_footer_new)).setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
+        ((Button) findViewById(R.id.btn_footer_history)).setOnClickListener(
+                v -> startActivity(new Intent(this, HistoryActivity.class)));
+        ((Button) findViewById(R.id.btn_footer_learning)).setOnClickListener(
+                v -> startActivity(new Intent(this, LearningActivity.class)));
+        ((Button) findViewById(R.id.btn_footer_tasks)).setOnClickListener(
+                v -> startActivity(new Intent(this, TaskActivity.class)));
+
+        findViewById(R.id.link_team).setOnClickListener(v -> showInfo("درباره با ما",
+                "این برنامه توسط مهیار محمد ابراهیمی و علی قاسمی نوشته شده است.\n\n" +
+                "مخزن کد: github.com/alighasemi889/Chatbot-Application"));
+        findViewById(R.id.link_app).setOnClickListener(
+                v -> startActivity(new Intent(this, AboutActivity.class)));
+        findViewById(R.id.link_model).setOnClickListener(v -> showInfo("درباره مدل",
+                "این نسخه از برنامه به هیچ مدل هوش مصنوعی آنلاین وصل نیست.\n\n" +
+                "پاسخ‌ها از یک پایگاه دانش داخلی تهیه می‌شوند که با کلیدواژه انتخاب می‌شوند، " +
+                "و همچنین آزمون‌ها از بانک سؤال محلی ساخته می‌شوند. " +
+                "به همین دلیل پاسخ به سؤال‌های خارج از پایگاه دانش ممکن نیست."));
+    }
+
+    private void showInfo(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .show();
     }
 
     /** Home screen: welcome title and four topic cards. Shown only before the first user message. */
@@ -188,24 +221,11 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_theme) {
             ThemeManager.toggle(this);
             return true;
-        } else if (id == R.id.action_new_chat) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-            return true;
         } else if (id == R.id.action_rename) {
             showRenameDialog();
             return true;
         } else if (id == R.id.action_saved) {
             showSavedAnswers();
-            return true;
-        } else if (id == R.id.action_about) {
-            startActivity(new Intent(this, AboutActivity.class));
-            return true;
-        } else if (id == R.id.action_tasks) {
-            startActivity(new Intent(this, TaskActivity.class));
-            return true;
-        } else if (id == R.id.action_history) {
-            startActivity(new Intent(this, HistoryActivity.class));
             return true;
         } else if (id == R.id.action_logout) {
             UserManager.logout(this);

@@ -21,6 +21,8 @@
         <receiver android:name=".ReminderReceiver" android:exported="false" />
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize" />
             <activity android:name=".AboutActivity" />
+        <activity android:name=".LearningActivity" />
+        <activity android:name=".QuizActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

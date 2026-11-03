@@ -29,6 +29,49 @@ public final class KnowledgeBase {
     }
 
     static {
+
+        // ---- Core definitions (ready answers) ----
+        add("هوش مصنوعی چیست؟",
+                new String[]{"هوش مصنوعی", "ai", "artificial intelligence", "هوش مصنوعی چیه"},
+                "هوش مصنوعی (AI) شاخه‌ای از علوم کامپیوتر است که هدفش ساختن سامانه‌هایی است که کارهایی نیازمند هوش انسانی را انجام دهند؛ مثل یادگیری از داده، استدلال، تشخیص تصویر و صدا، و درک و تولید زبان.\n\n" +
+                "زیرشاخه‌های مهم آن یادگیری ماشین، یادگیری عمیق، پردازش زبان طبیعی (NLP) و بینایی ماشین هستند. نمونه‌های روزمره: دستیارهای صوتی، ترجمه ماشینی و سیستم‌های توصیه‌گر.");
+
+        add("برنامه‌نویسی چیست؟",
+                new String[]{"برنامه نویسی", "برنامه نویسی چیه", "programming", "coding", "کدنویسی", "برنامه نویسی چیست"},
+                "برنامه‌نویسی نوشتن دستورهای دقیق و مرحله‌به‌مرحله به زبان‌های برنامه‌نویسی است تا کامپیوتر کاری مشخص را انجام دهد. هر برنامه از ورودی می‌گیرد، داده را پردازش می‌کند و خروجی تولید می‌کند.\n\n" +
+                "مفاهیم پایه: متغیر، شرط، حلقه، تابع، ساختار داده و الگوریتم. برای شروع معمولاً یک زبان ساده مثل پایتون انتخاب می‌شود.");
+
+        add("امنیت سایبری چیست؟",
+                new String[]{"امنیت سایبری", "cyber security", "cybersecurity", "امنیت سایبری چیه", "امنیت سایبری چیست", "هک", "hacking"},
+                "امنیت سایبری حفاظت از سامانه‌ها، شبکه‌ها و داده‌ها در برابر دسترسی غیرمجاز، سرقت، دستکاری و اختلال است.\n\n" +
+                "سه هدف اصلی آن محرمانگی، یکپارچگی و دسترس‌پذیری است (مدل CIA). حوزه‌های مهم آن امنیت شبکه، امنیت برنامه‌های کاربردی، مدیریت هویت و پاسخ به حادثه هستند.");
+
+        add("Rust چیست؟",
+                new String[]{"rust", "راست", "زبان راست", "rust چیه", "rust چیست"},
+                "Rust یک زبان برنامه‌نویسی سیستمی است که توسط Mozilla توسعه یافت و بر دو اصل سرعت بالا و ایمنی حافظه تمرکز دارد. Rust بدون Garbage Collector کار می‌کند و با مفاهیم Ownership و Borrow Checker بسیاری از خطاهای حافظه را در زمان کامپایل شناسایی می‌کند.\n\n" +
+                "کاربردها: سیستم‌عامل و درایور، مرورگر، سیستم‌های تعبیه‌شده، بک‌اند با کارایی بالا. هسته لینوکس و بخش‌هایی از اندروید هم از Rust استفاده می‌کنند.");
+
+        add("Python چیست؟",
+                new String[]{"python", "پایتون", "پایتون چیه", "پایتون چیست", "python چیه", "python چیست"},
+                "Python یک زبان برنامه‌نویسی سطح بالا، خوانا و مناسب برای شروع یادگیری است. سینتکس ساده و کتابخانه‌های فراوان آن را برای وب، تحلیل داده، هوش مصنوعی، اتوماسیون و امنیت محبوب کرده است.\n\n" +
+                "مثال: print(\"سلام\") چاپ می‌کند. کتابخانه‌های مهم: NumPy، Pandas، PyTorch، Flask و Django.");
+
+        add("میکروکنترلر چیست؟",
+                new String[]{"میکروکنترلر", "میکروکنتلر", "میروکنترلر", "میروکنتلر", "میکرو کنترلر", "microcontroller", "mcu", "arduino", "آردوینو"},
+                "میکروکنترلر (Microcontroller) یک تراشه کوچک است که پردازنده، حافظه و ورودی/خروجی را در یک قطعه دارد و معمولاً برای کنترل دستگاه‌های الکترونیکی استفاده می‌شود؛ مثل لوازم خانگی، خودرو و سنسورها.\n\n" +
+                "برخلاف کامپیوتر، معمولاً یک برنامه ثابت را اجرا می‌کند. پلتفرم‌هایی مثل Arduino و ESP32 برای شروع محبوب‌اند.");
+
+        add("نقشه راه یادگیری هوش مصنوعی",
+                new String[]{"نقشه راه", "نقشه راهش", "roadmap", "مسیر یادگیری", "نقشه راه هوش مصنوعی", "مسیر یادگیری هوش مصنوعی", "هوش مصنوعی", "از کجا شروع کنم"},
+                "نقشه راه پیشنهادی برای یادگیری هوش مصنوعی:\n\n" +
+                "۱. پایه‌ها: ریاضیات (جبر خطی، احتمال، آمار) و برنامه‌نویسی پایتون.\n" +
+                "۲. داده: کار با Pandas و NumPy، پاک‌سازی و تحلیل داده.\n" +
+                "۳. یادگیری ماشین: رگرسیون، طبقه‌بندی، Overfitting و ارزیابی مدل با scikit-learn.\n" +
+                "۴. یادگیری عمیق: شبکه عصبی، CNN و RNN با PyTorch یا TensorFlow.\n" +
+                "۵. مدل‌های زبانی: Transformer، Embedding، RAG و مهندسی پرامپت.\n" +
+                "۶. پروژه: ساخت چند پروژه کوچک و انتشار آن‌ها در GitHub.\n\n" +
+                "هر مرحله را با یک پروژه کوچک تمرین کنید تا مفاهیم جا بیفتند.");
+
         // ---- Cybersecurity ----
         add("فیشینگ (Phishing)",
                 new String[]{"فیشینگ", "phishing", "ایمیل جعلی", "کلاهبرداری اینترنتی"},
@@ -142,15 +185,15 @@ public final class KnowledgeBase {
 
     /** Returns the best matching entry, or null when the question is outside the knowledge base. */
     public static Entry find(String question) {
-        String q = normalize(question);
-        if (q.isEmpty()) return null;
+        String q = " " + normalize(question) + " ";
+        if (q.trim().isEmpty()) return null;
         Entry best = null;
         int bestScore = 0;
         for (Entry e : ENTRIES) {
             int score = 0;
             for (String k : e.keywords) {
                 String nk = normalize(k);
-                if (!nk.isEmpty() && q.contains(nk)) {
+                if (!nk.isEmpty() && q.contains(" " + nk + " ")) {
                     score += nk.length() >= 4 ? 2 : 1;
                 }
             }
@@ -160,6 +203,15 @@ public final class KnowledgeBase {
             }
         }
         return bestScore >= 2 ? best : null;
+    }
+
+    /** Compact text of all entries, used as grounding context for the model's system prompt. */
+    public static String asContext() {
+        StringBuilder sb = new StringBuilder();
+        for (Entry e : ENTRIES) {
+            sb.append("### ").append(e.title).append('\n').append(e.answer).append("\n\n");
+        }
+        return sb.toString();
     }
 
     /** Formats an entry for display in the chat. */

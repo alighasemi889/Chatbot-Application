@@ -21,7 +21,7 @@ public class ApiClient {
 
     public static String chat(String url, String key, String model, List<Message> history) throws Exception {
         JSONArray msgs = new JSONArray();
-        msgs.put(new JSONObject().put("role", "system").put("content", SYSTEM_PROMPT));
+        msgs.put(new JSONObject().put("role", "system").put("content", SYSTEM_PROMPT + "\n\nاطلاعات پایگاه دانش داخلی (در صورت ربط، بر اساس آن پاسخ بده):\n" + KnowledgeBase.asContext()));
         for (Message m : history) {
             msgs.put(new JSONObject()
                     .put("role", m.fromUser ? "user" : "assistant")

@@ -2,17 +2,13 @@ package com.example.aichat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -41,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private View sendBtn;
     private SharedPreferences prefs;
     private DrawerLayout drawer;
-    private ActionBarDrawerToggle drawerToggle;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler ui = new Handler(Looper.getMainLooper());
     private String conversationId;
@@ -59,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
-        setTitle(R.string.app_name);
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
         prefs = getSharedPreferences("settings", MODE_PRIVATE);
 
         recycler = findViewById(R.id.recycler);
@@ -94,24 +89,15 @@ public class MainActivity extends AppCompatActivity {
         drawer = findViewById(R.id.drawer_layout);
         NavigationView nav = findViewById(R.id.nav_view);
 
-        drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.drawer_open, R.string.drawer_close);
-        drawer.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
 
         TextView headerUser = nav.getHeaderView(0).findViewById(R.id.header_user);
         headerUser.setText(getString(R.string.nav_header_user, currentUser));
 
+        findViewById(R.id.menu_btn).setOnClickListener(v -> drawer.openDrawer(GravityCompat.START));
         nav.setNavigationItemSelectedListener(item -> {
             drawer.closeDrawer(GravityCompat.START);
             return handleAction(item.getItemId());
         });
-        updateThemeMenuTitles(nav.getMenu().findItem(R.id.nav_theme));
-    }
-
-    private void updateThemeMenuTitles(MenuItem themeItem) {
-        if (themeItem != null) {
-            themeItem.setTitle(ThemeManager.isDarkMode(this) ? R.string.light_mode : R.string.dark_mode);
-        }
     }
 
     private void send() {
@@ -125,6 +111,16 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyItemRangeInserted(messages.size() - 2, 2);
         scrollToEnd();
         sendBtn.setEnabled(false);
+
+        KnowledgeBase.Entry kb = KnowledgeBase.find(q);
+        if (kb != null) {
+            typing.text = KnowledgeBase.format(kb);
+            adapter.notifyItemChanged(messages.indexOf(typing));
+            sendBtn.setEnabled(true);
+            scrollToEnd();
+            ChatStore.saveConversation(this, conversationId, messages);
+            return;
+        }
 
         final List<Message> history = new ArrayList<>(messages.subList(0, messages.size() - 1));
         final String url = getSetting("url", DEFAULT_URL);
@@ -159,43 +155,20 @@ public class MainActivity extends AppCompatActivity {
         recycler.scrollToPosition(messages.size() - 1);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem theme = menu.findItem(R.id.action_theme);
-        if (theme != null) {
-            theme.setTitle(ThemeManager.isDarkMode(this) ? R.string.light_mode : R.string.dark_mode);
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) return true;
-        return handleAction(item.getItemId()) || super.onOptionsItemSelected(item);
-    }
-
     /** Shared by the sidebar and the overflow menu. */
     private boolean handleAction(int id) {
-        if (id == R.id.action_settings || id == R.id.nav_settings) {
+        if (id == R.id.nav_settings) {
             showSettings();
-        } else if (id == R.id.action_theme || id == R.id.nav_theme) {
-            ThemeManager.toggle(this);
-        } else if (id == R.id.action_new_chat || id == R.id.nav_new_chat) {
+        } else if (id == R.id.nav_new_chat) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
-        } else if (id == R.id.action_tasks || id == R.id.nav_tasks) {
+        } else if (id == R.id.nav_tasks) {
             startActivity(new Intent(this, TaskActivity.class));
-        } else if (id == R.id.action_history || id == R.id.nav_history) {
+        } else if (id == R.id.nav_history) {
             startActivity(new Intent(this, HistoryActivity.class));
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
-        } else if (id == R.id.action_logout || id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
             UserManager.logout(this);
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -226,17 +199,6 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (drawerToggle != null) drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (drawerToggle != null) drawerToggle.onConfigurationChanged(newConfig);
-    }
 
     @Override
     public void onBackPressed() {

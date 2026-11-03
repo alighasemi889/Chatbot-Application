@@ -1,26 +1,26 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="80dp"
-    android:height="80dp"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="88dp"
+    android:height="88dp"
     android:viewportWidth="100"
     android:viewportHeight="100">
-    
-    <!-- Background circle -->
-    <path
-        android:fillColor="#10A37F"
-        android:pathData="M 50 10 A 40 40 0 1 1 50 90 A 40 40 0 1 1 50 10 Z" />
-    
-    <!-- Chat bubble 1 (left) -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M 20 35 L 35 35 L 35 50 L 22 50 Q 20 50 20 48 L 20 35 Z" />
-    
-    <!-- Chat bubble 2 (right, larger) -->
-    <path
-        android:fillColor="#E0E0E0"
-        android:pathData="M 50 55 L 75 55 L 75 75 L 52 75 Q 50 75 50 73 L 50 55 Z" />
-    
-    <!-- Cursor dot -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M 32 42 A 2 2 0 1 1 32 42 Z" />
+
+    <path android:pathData="M28,4 H72 A24,24 0 0 1 96,28 V72 A24,24 0 0 1 72,96 H28 A24,24 0 0 1 4,72 V28 A24,24 0 0 1 28,4 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="0" android:startY="0"
+                android:endX="100" android:endY="100"
+                android:type="linear">
+                <item android:color="#A78BFA" android:offset="0" />
+                <item android:color="#6D4DE0" android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M50,22 C53,40 60,47 78,50 C60,53 53,60 50,78 C47,60 40,53 22,50 C40,47 47,40 50,22 Z" />
+
+    <path android:fillColor="#FFFFFFFF"
+        android:fillAlpha="0.85"
+        android:pathData="M76,16 L77.6,21.4 L83,23 L77.6,24.6 L76,30 L74.4,24.6 L69,23 L74.4,21.4 Z" />
 </vector>

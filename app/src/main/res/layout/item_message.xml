@@ -3,16 +3,31 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingHorizontal="12dp"
-    android:paddingVertical="4dp">
+    android:orientation="vertical"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="6dp">
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="300dp"
-        android:padding="14dp"
-        android:textSize="16sp"
+        android:maxWidth="320dp"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="10dp"
+        android:textColor="@color/text_dark"
         android:textIsSelectable="true"
-        android:lineSpacingMultiplier="1.15" />
+        android:textSize="16sp"
+        android:lineSpacingMultiplier="1.2" />
+
+    <ImageButton
+        android:id="@+id/copy"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/copy_reply"
+        android:padding="7dp"
+        android:src="@drawable/ic_copy"
+        android:tint="@color/text_muted"
+        android:visibility="gone" />
 </LinearLayout>

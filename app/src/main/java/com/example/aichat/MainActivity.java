@@ -2,6 +2,7 @@ package com.example.aichat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,11 +10,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +33,15 @@ public class MainActivity extends AppCompatActivity {
     private static final String DEFAULT_URL = "https://api.together.ai/v1/chat/completions";
     private static final String DEFAULT_KEY = "dahl_GxSwCZGe12r1uaSCESZF9cdrRhKKoVkw9";
     private static final String DEFAULT_MODEL = "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo";
-    
+
     private final List<Message> messages = new ArrayList<>();
     private ChatAdapter adapter;
     private RecyclerView recycler;
     private EditText input;
     private View sendBtn;
     private SharedPreferences prefs;
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle drawerToggle;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler ui = new Handler(Looper.getMainLooper());
     private String conversationId;
@@ -41,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeManager.apply(this);
-        
-        // Check login
+
         String currentUser = UserManager.getCurrentUser(this);
         if (currentUser == null) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -51,12 +59,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
-        setTitle(getString(R.string.app_name) + " (" + currentUser + ")");
+        setTitle(R.string.app_name);
         prefs = getSharedPreferences("settings", MODE_PRIVATE);
 
         recycler = findViewById(R.id.recycler);
         input = findViewById(R.id.input);
         sendBtn = findViewById(R.id.send);
+
+        setupDrawer(currentUser);
 
         adapter = new ChatAdapter(messages);
         LinearLayoutManager lm = new LinearLayoutManager(this);
@@ -78,6 +88,30 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         sendBtn.setOnClickListener(v -> send());
+    }
+
+    private void setupDrawer(String currentUser) {
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView nav = findViewById(R.id.nav_view);
+
+        drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.drawer_open, R.string.drawer_close);
+        drawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+
+        TextView headerUser = nav.getHeaderView(0).findViewById(R.id.header_user);
+        headerUser.setText(getString(R.string.nav_header_user, currentUser));
+
+        nav.setNavigationItemSelectedListener(item -> {
+            drawer.closeDrawer(GravityCompat.START);
+            return handleAction(item.getItemId());
+        });
+        updateThemeMenuTitles(nav.getMenu().findItem(R.id.nav_theme));
+    }
+
+    private void updateThemeMenuTitles(MenuItem themeItem) {
+        if (themeItem != null) {
+            themeItem.setTitle(ThemeManager.isDarkMode(this) ? R.string.light_mode : R.string.dark_mode);
+        }
     }
 
     private void send() {
@@ -142,29 +176,33 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
+        if (drawerToggle.onOptionsItemSelected(item)) return true;
+        return handleAction(item.getItemId()) || super.onOptionsItemSelected(item);
+    }
+
+    /** Shared by the sidebar and the overflow menu. */
+    private boolean handleAction(int id) {
+        if (id == R.id.action_settings || id == R.id.nav_settings) {
             showSettings();
-            return true;
-        } else if (item.getItemId() == R.id.action_theme) {
+        } else if (id == R.id.action_theme || id == R.id.nav_theme) {
             ThemeManager.toggle(this);
-            return true;
-        } else if (item.getItemId() == R.id.action_new_chat) {
+        } else if (id == R.id.action_new_chat || id == R.id.nav_new_chat) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
-            return true;
-        } else if (item.getItemId() == R.id.action_tasks) {
+        } else if (id == R.id.action_tasks || id == R.id.nav_tasks) {
             startActivity(new Intent(this, TaskActivity.class));
-            return true;
-        } else if (item.getItemId() == R.id.action_history) {
+        } else if (id == R.id.action_history || id == R.id.nav_history) {
             startActivity(new Intent(this, HistoryActivity.class));
-            return true;
-        } else if (item.getItemId() == R.id.action_logout) {
+        } else if (id == R.id.nav_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+        } else if (id == R.id.action_logout || id == R.id.nav_logout) {
             UserManager.logout(this);
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-            return true;
+        } else {
+            return false;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void showSettings() {
@@ -186,6 +224,27 @@ public class MainActivity extends AppCompatActivity {
                         .apply())
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (drawerToggle != null) drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (drawerToggle != null) drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

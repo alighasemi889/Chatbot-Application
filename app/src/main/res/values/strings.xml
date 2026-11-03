@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">دستیار هوشمند</string>
+    <string name="app_name">عبدالله</string>
     <string name="hint">سوال خود را بنویسید…</string>
     <string name="send">ارسال</string>
     <string name="settings">تنظیمات</string>
@@ -70,4 +70,13 @@
     <string name="code_expired">کد منقضی شده است؛ کد جدید دریافت کنید</string>
     <string name="timer_format">اعتبار کد: %d ثانیه</string>
     <string name="code_regenerated">کد جدید ایجاد شد</string>
+
+    <string name="drawer_open">باز کردن منو</string>
+    <string name="drawer_close">بستن منو</string>
+    <string name="about_app">درباره برنامه</string>
+    <string name="about_desc">دستیار هوشمند فارسی‌زبان با گفتگوی ذخیره‌شونده، تسک‌های یادآور، نمایش خوانای کد و کپی سریع پاسخ‌ها.</string>
+    <string name="version_format">نسخه %1$s (کد نسخه %2$s)</string>
+    <string name="version_unknown">نسخه نامشخص</string>
+    <string name="nav_header_user">کاربر: %s</string>
+    <string name="copy_reply">کپی پاسخ</string>
 </resources>

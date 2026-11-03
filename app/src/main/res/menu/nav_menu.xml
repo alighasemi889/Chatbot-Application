@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_new_chat" android:icon="@drawable/ic_nav_add" android:title="@string/new_chat" />
+    <item android:id="@+id/nav_history" android:icon="@drawable/ic_nav_history" android:title="@string/history" />
+    <item android:id="@+id/nav_tasks" android:icon="@drawable/ic_nav_task" android:title="@string/tasks" />
+    <item android:id="@+id/nav_settings" android:icon="@drawable/ic_nav_settings" android:title="@string/settings" />
+    <item android:id="@+id/nav_theme" android:icon="@drawable/ic_nav_theme" android:title="@string/dark_mode" />
+    <item android:id="@+id/nav_about" android:icon="@drawable/ic_nav_info" android:title="@string/about_app" />
+    <item android:id="@+id/nav_logout" android:icon="@drawable/ic_nav_logout" android:title="@string/logout" />
+</menu>

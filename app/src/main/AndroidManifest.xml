@@ -16,6 +16,7 @@
         </activity>
         <activity android:name=".VerifyActivity" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".HistoryActivity" />
+        <activity android:name=".AboutActivity" />
         <activity android:name=".TaskActivity" />
         <receiver android:name=".ReminderReceiver" android:exported="false" />
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize" />

@@ -26,7 +26,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         ListView list = findViewById(R.id.list);
         TextView empty = findViewById(R.id.empty);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles);
+        adapter = new ArrayAdapter<>(this, R.layout.item_history, R.id.text1, titles);
         list.setAdapter(adapter);
         list.setEmptyView(empty);
 

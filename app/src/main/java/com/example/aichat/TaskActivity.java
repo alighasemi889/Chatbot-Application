@@ -38,7 +38,7 @@ public class TaskActivity extends AppCompatActivity {
         ListView list = findViewById(R.id.list);
         TextView empty = findViewById(R.id.empty);
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, labels);
+        adapter = new ArrayAdapter<>(this, R.layout.item_history, R.id.text1, labels);
         list.setAdapter(adapter);
         list.setEmptyView(empty);
 

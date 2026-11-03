@@ -56,7 +56,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
         if (m.fromUser) {
             h.root.setGravity(Gravity.END);
             h.text.setBackgroundResource(R.drawable.bubble_user);
-            h.text.setTextColor(0xFFFFFFFF);
+            h.text.setTextColor(h.itemView.getContext().getColor(R.color.text_dark));
         } else {
             h.root.setGravity(Gravity.START);
             h.text.setBackgroundResource(R.drawable.bubble_bot);

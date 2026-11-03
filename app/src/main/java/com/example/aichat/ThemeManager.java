@@ -9,7 +9,7 @@ public class ThemeManager {
 
     public static void apply(Activity activity) {
         SharedPreferences prefs = activity.getSharedPreferences("settings", Activity.MODE_PRIVATE);
-        boolean isDark = prefs.getBoolean(PREF_DARK_MODE, false);
+        boolean isDark = prefs.getBoolean(PREF_DARK_MODE, true);
         AppCompatDelegate.setDefaultNightMode(
             isDark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
         );
@@ -17,7 +17,7 @@ public class ThemeManager {
 
     public static void toggle(Activity activity) {
         SharedPreferences prefs = activity.getSharedPreferences("settings", Activity.MODE_PRIVATE);
-        boolean isDark = prefs.getBoolean(PREF_DARK_MODE, false);
+        boolean isDark = prefs.getBoolean(PREF_DARK_MODE, true);
         prefs.edit().putBoolean(PREF_DARK_MODE, !isDark).apply();
         apply(activity);
         activity.recreate();
@@ -25,6 +25,6 @@ public class ThemeManager {
 
     public static boolean isDarkMode(Activity activity) {
         SharedPreferences prefs = activity.getSharedPreferences("settings", Activity.MODE_PRIVATE);
-        return prefs.getBoolean(PREF_DARK_MODE, false);
+        return prefs.getBoolean(PREF_DARK_MODE, true);
     }
 }

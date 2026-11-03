@@ -51,4 +51,23 @@
     <string name="biometric_failed">احراز هویت انجام نشد</string>
     <string name="biometric_no_user">ابتدا یک بار با نام کاربری و رمز وارد شوید</string>
     <string name="system_prompt_info">دستیار فارسی‌زبان و مختصر</string>
+
+    <string name="login_title">ورود به حساب</string>
+    <string name="login_subtitle">برای ادامه، شماره تلفن خود را وارد کنید</string>
+    <string name="phone_hint">شماره تلفن (مثلاً 09121234567)</string>
+    <string name="send_code">دریافت کد تأیید</string>
+    <string name="invalid_phone">شماره تلفن معتبر نیست</string>
+    <string name="login_test_note">نسخه آزمایشی است؛ پیامکی ارسال نمی‌شود و کد در صفحه بعد نمایش داده می‌شود.</string>
+    <string name="verify_title">تأیید شماره</string>
+    <string name="verify_subtitle">کد تأیید برای شماره %s ایجاد شد</string>
+    <string name="test_code_label">کد آزمایشی</string>
+    <string name="test_code_note">فقط برای آزمایش؛ پیامک ارسال نمی‌شود</string>
+    <string name="code_hint">کد ۶ رقمی</string>
+    <string name="verify_and_login">تأیید و ورود</string>
+    <string name="resend_code">ارسال مجدد کد</string>
+    <string name="change_phone">تغییر شماره</string>
+    <string name="invalid_code">کد وارد شده صحیح نیست</string>
+    <string name="code_expired">کد منقضی شده است؛ کد جدید دریافت کنید</string>
+    <string name="timer_format">اعتبار کد: %d ثانیه</string>
+    <string name="code_regenerated">کد جدید ایجاد شد</string>
 </resources>

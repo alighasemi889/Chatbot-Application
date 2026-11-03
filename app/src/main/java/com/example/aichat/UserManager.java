@@ -37,6 +37,15 @@ public class UserManager {
         prefs.edit().putString(PREF_CURRENT_USER, username).apply();
     }
 
+    /** Phone-based login: creates the account on first successful verification. */
+    public static void loginWithPhone(Context ctx, String phone) {
+        SharedPreferences prefs = ctx.getSharedPreferences("users", Context.MODE_PRIVATE);
+        if (!prefs.contains(PREF_USERS_PREFIX + phone)) {
+            prefs.edit().putString(PREF_USERS_PREFIX + phone, "otp").apply();
+        }
+        setCurrentUser(ctx, phone);
+    }
+
     public static void logout(Context ctx) {
         SharedPreferences prefs = ctx.getSharedPreferences("users", Context.MODE_PRIVATE);
         prefs.edit().remove(PREF_CURRENT_USER).apply();

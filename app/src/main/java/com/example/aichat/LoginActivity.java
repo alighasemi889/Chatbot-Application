@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Html;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -26,38 +25,60 @@ public class LoginActivity extends AppCompatActivity {
         ThemeManager.apply(this);
         setContentView(R.layout.activity_login);
 
-        EditText username = findViewById(R.id.username);
-        EditText password = findViewById(R.id.password);
-        Button loginBtn = findViewById(R.id.login_btn);
+        EditText phoneInput = findViewById(R.id.phone);
+        Button sendBtn = findViewById(R.id.send_code_btn);
         Button bioBtn = findViewById(R.id.btn_biometric);
-        TextView toggle = findViewById(R.id.toggle_register);
 
-        loginBtn.setOnClickListener(v -> {
-            String user = username.getText().toString().trim();
-            String pass = password.getText().toString().trim();
+        animateIn(findViewById(R.id.card));
 
-            if (user.isEmpty() || pass.isEmpty()) {
-                username.setError(getString(R.string.empty_field));
+        sendBtn.setOnClickListener(v -> {
+            String phone = OtpManager.normalizePhone(phoneInput.getText().toString());
+            if (!OtpManager.isValidPhone(phone)) {
+                phoneInput.setError(getString(R.string.invalid_phone));
                 return;
             }
-
-            if (UserManager.login(this, user, pass)) {
-                offerBiometric(user);
-                goToMain();
-            } else {
-                password.setText("");
-                password.setError(getString(R.string.invalid_login));
-            }
+            OtpManager.generate(phone);
+            startActivity(new Intent(this, VerifyActivity.class));
         });
 
         bioBtn.setOnClickListener(v -> authenticateWithBiometric());
-        bioBtn.setVisibility(biometricUser() != null && canUseBiometric() ? android.view.View.VISIBLE : android.view.View.GONE);
+        bioBtn.setVisibility(biometricUser(this) != null && canUseBiometric(this) ? View.VISIBLE : View.GONE);
+    }
 
-        toggle.setText(Html.fromHtml(getString(R.string.no_account)));
-        toggle.setOnClickListener(v -> {
-            startActivity(new Intent(this, RegisterActivity.class));
-            finish();
-        });
+    /** Subtle fade + slide-up entrance animation. */
+    static void animateIn(View v) {
+        v.setAlpha(0f);
+        v.setTranslationY(40f);
+        v.animate().alpha(1f).translationY(0f).setDuration(450).setStartDelay(80).start();
+    }
+
+
+    static boolean canUseBiometric(Context ctx) {
+        return BiometricManager.from(ctx).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                == BiometricManager.BIOMETRIC_SUCCESS;
+    }
+
+    private static SharedPreferences biometricPrefs(Context ctx) {
+        return ctx.getSharedPreferences(PREF_BIOMETRIC, Context.MODE_PRIVATE);
+    }
+
+    static String biometricUser(Context ctx) {
+        return biometricPrefs(ctx).getString(KEY_BIO_USER, null);
+    }
+
+    /** After a successful OTP login, ask once whether to enable fingerprint login, then call next. */
+    static void offerBiometric(AppCompatActivity activity, String user, Runnable next) {
+        if (!canUseBiometric(activity) || user.equals(biometricUser(activity))) {
+            next.run();
+            return;
+        }
+        new AlertDialog.Builder(activity)
+                .setMessage(R.string.enable_biometric_q)
+                .setPositiveButton(R.string.yes, (d, w) ->
+                        biometricPrefs(activity).edit().putString(KEY_BIO_USER, user).apply())
+                .setNegativeButton(R.string.no, null)
+                .setOnDismissListener(d -> next.run())
+                .show();
     }
 
     private void goToMain() {
@@ -65,32 +86,8 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private boolean canUseBiometric() {
-        return BiometricManager.from(this).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-                == BiometricManager.BIOMETRIC_SUCCESS;
-    }
-
-    private SharedPreferences biometricPrefs() {
-        return getSharedPreferences(PREF_BIOMETRIC, Context.MODE_PRIVATE);
-    }
-
-    private String biometricUser() {
-        return biometricPrefs().getString(KEY_BIO_USER, null);
-    }
-
-    /** After a successful password login, ask once whether to enable fingerprint login. */
-    private void offerBiometric(String user) {
-        if (!canUseBiometric() || user.equals(biometricUser())) return;
-        new AlertDialog.Builder(this)
-                .setMessage(R.string.enable_biometric_q)
-                .setPositiveButton(R.string.yes, (d, w) ->
-                        biometricPrefs().edit().putString(KEY_BIO_USER, user).apply())
-                .setNegativeButton(R.string.no, null)
-                .show();
-    }
-
     private void authenticateWithBiometric() {
-        final String user = biometricUser();
+        final String user = biometricUser(this);
         if (user == null) {
             Toast.makeText(this, R.string.biometric_no_user, Toast.LENGTH_SHORT).show();
             return;

@@ -87,7 +87,7 @@
     <string name="coming_soon">این قابلیت هنوز فعال نیست</string>
     <string name="q_call">تماس</string>
     <string name="q_message">پیام</string>
-    <string name="q_apps">برنامه‌ها</string>
+    <string name="q_apps">سؤال آماده</string>
     <string name="q_reminder">یادآور</string>
     <string name="q_ai">پرسش از AI</string>
     <string name="q_more">بیشتر</string>
@@ -103,4 +103,36 @@
     <string name="appearance">نمایش</string>
     <string name="appearance_dark">تیره</string>
     <string name="back">بازگشت</string>
+
+    <string name="speech_unavailable">تشخیص گفتار روی این دستگاه در دسترس نیست</string>
+    <string name="speech_error">تشخیص گفتار انجام نشد</string>
+    <string name="speech_no_result">متنی شناسایی نشد</string>
+    <string name="mic_permission">برای گفتار به متن، دسترسی میکروفون لازم است</string>
+    <string name="listening">در حال شنیدن…</string>
+    <string name="preset_title">سؤالات آماده</string>
+    <string name="row_language">زبان</string>
+    <string name="lang_fa">فارسی</string>
+    <string name="lang_en">English</string>
+    <string name="row_voice">پخش صوتی پاسخ‌ها</string>
+    <string name="row_github">اتصال GitHub</string>
+    <string name="github_not_connected">متصل نیست</string>
+    <string name="github_title">اتصال GitHub</string>
+    <string name="github_hint">نام کاربری یا لینک پروفایل</string>
+    <string name="github_fetch">دریافت اطلاعات</string>
+    <string name="github_open">مشاهده در GitHub</string>
+    <string name="github_disconnect">قطع اتصال</string>
+    <string name="github_invalid">نام کاربری یا لینک معتبر نیست</string>
+    <string name="github_not_found">کاربری با این نام پیدا نشد</string>
+    <string name="github_rate">محدودیت درخواست GitHub؛ کمی بعد دوباره تلاش کنید</string>
+    <string name="github_network">خطا در ارتباط با GitHub</string>
+    <string name="github_no_bio">بیوگرافی ثبت نشده است</string>
+    <string name="github_commits_unknown">نامشخص</string>
+    <string name="github_commits_unavailable">جستجوی کامیت‌ها در دسترس نیست</string>
+    <string name="github_age">%1$d سال و %2$d ماه</string>
+    <string name="label_repos">مخازن</string>
+    <string name="label_stars">ستاره‌ها</string>
+    <string name="label_commits">کامیت‌ها</string>
+    <string name="label_followers">دنبال‌کنندگان</string>
+    <string name="label_created">تاریخ ایجاد</string>
+    <string name="label_age">سن حساب</string>
 </resources>

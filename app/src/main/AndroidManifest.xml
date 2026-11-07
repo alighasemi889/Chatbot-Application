@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <application
@@ -17,6 +24,9 @@
         <activity android:name=".VerifyActivity" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".AboutActivity" />
+        <activity android:name=".GithubActivity" />
+        <activity android:name=".PresetActivity" />
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".TaskActivity" />
         <receiver android:name=".ReminderReceiver" android:exported="false" />
         <activity android:name=".MainActivity" android:windowSoftInputMode="adjustResize" />

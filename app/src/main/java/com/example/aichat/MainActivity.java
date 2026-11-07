@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,6 +14,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private DrawerLayout drawer;
     private View homePanel;
+    private TtsHelper tts;
+    private SpeechHelper speech;
+    private ActivityResultLauncher<Intent> presetLauncher;
+    private ActivityResultLauncher<String> micPermission;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler ui = new Handler(Looper.getMainLooper());
     private String conversationId;
@@ -86,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
         sendBtn.setOnClickListener(v -> send());
         setupHome();
+        tts = new TtsHelper(this);
+        speech = new SpeechHelper();
+        initLaunchers();
         BottomNav.setup(this, findViewById(R.id.bottom_nav), R.id.nav_home);
         updateMode();
     }
@@ -109,10 +121,10 @@ public class MainActivity extends AppCompatActivity {
     private void setupHome() {
         homePanel = findViewById(R.id.home_panel);
         findViewById(R.id.notif_btn).setOnClickListener(v -> startActivity(new Intent(this, TaskActivity.class)));
-        findViewById(R.id.mic_btn).setOnClickListener(v -> Toast.makeText(this, R.string.voice_coming_soon, Toast.LENGTH_SHORT).show());
+        findViewById(R.id.mic_btn).setOnClickListener(v -> startVoiceInput());
         findViewById(R.id.q_call).setOnClickListener(v -> Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show());
         findViewById(R.id.q_message).setOnClickListener(v -> Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show());
-        findViewById(R.id.q_apps).setOnClickListener(v -> Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show());
+        findViewById(R.id.q_apps).setOnClickListener(v -> presetLauncher.launch(new Intent(this, PresetActivity.class)));
         findViewById(R.id.q_reminder).setOnClickListener(v -> startActivity(new Intent(this, TaskActivity.class)));
         findViewById(R.id.q_ai).setOnClickListener(v -> input.requestFocus());
         findViewById(R.id.q_more).setOnClickListener(v -> drawer.openDrawer(GravityCompat.START));
@@ -128,10 +140,53 @@ public class MainActivity extends AppCompatActivity {
         recycler.setVisibility(chatting ? View.VISIBLE : View.GONE);
     }
 
+    private void initLaunchers() {
+        presetLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), r -> {
+            if (r.getResultCode() == RESULT_OK && r.getData() != null) {
+                String question = r.getData().getStringExtra(PresetActivity.EXTRA_QUESTION);
+                if (question != null) send(question);
+            }
+        });
+        micPermission = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+            if (granted) {
+                startVoiceInput();
+            } else {
+                Toast.makeText(this, R.string.mic_permission, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /** Speech-to-text: fills the input box so the user can review before sending. */
+    private void startVoiceInput() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            micPermission.launch(Manifest.permission.RECORD_AUDIO);
+            return;
+        }
+        Toast.makeText(this, R.string.listening, Toast.LENGTH_SHORT).show();
+        speech.start(this, UserPrefs.speechLangTag(this), new SpeechHelper.Callback() {
+            @Override
+            public void onResult(String text) {
+                input.setText(text);
+                input.setSelection(text.length());
+            }
+
+            @Override
+            public void onError(int messageRes) {
+                Toast.makeText(MainActivity.this, messageRes, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void send() {
-        final String q = input.getText().toString().trim();
-        if (q.isEmpty()) return;
+        String q = input.getText().toString().trim();
         input.setText("");
+        send(q);
+    }
+
+    /** Sends a question (typed, spoken, or from the preset library) and gets the answer. */
+    private void send(final String q) {
+        if (q.isEmpty()) return;
 
         messages.add(new Message(q, true));
         final Message typing = new Message(getString(R.string.typing), false);
@@ -144,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         KnowledgeBase.Entry kb = KnowledgeBase.find(q);
         if (kb != null) {
             typing.text = KnowledgeBase.format(kb);
+            if (UserPrefs.assistantVoice(this)) tts.speak(typing.text, UserPrefs.speechLangTag(this));
             adapter.notifyItemChanged(messages.indexOf(typing));
             sendBtn.setEnabled(true);
             scrollToEnd();
@@ -159,13 +215,14 @@ public class MainActivity extends AppCompatActivity {
         executor.execute(() -> {
             String reply;
             try {
-                reply = ApiClient.chat(url, key, model, history);
+                reply = ApiClient.chat(url, key, model, history, UserPrefs.answerLangHint(this));
             } catch (Exception e) {
                 reply = "خطا: " + e.getMessage();
             }
             final String finalReply = reply;
             ui.post(() -> {
                 typing.text = finalReply;
+                if (UserPrefs.assistantVoice(this)) tts.speak(finalReply, UserPrefs.speechLangTag(this));
                 adapter.notifyItemChanged(messages.indexOf(typing));
                 sendBtn.setEnabled(true);
                 scrollToEnd();
@@ -221,5 +278,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         executor.shutdownNow();
+        speech.destroy();
+        tts.shutdown();
     }
 }

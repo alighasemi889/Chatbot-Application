@@ -20,8 +20,12 @@ public class ApiClient {
             "پاسخ‌ها را روشن و مختصر بنویس، و اگر چیزی را نمی‌دانی صادقانه بگو.";
 
     public static String chat(String url, String key, String model, List<Message> history) throws Exception {
+        return chat(url, key, model, history, "");
+    }
+
+    public static String chat(String url, String key, String model, List<Message> history, String langHint) throws Exception {
         JSONArray msgs = new JSONArray();
-        msgs.put(new JSONObject().put("role", "system").put("content", SYSTEM_PROMPT + "\n\nاطلاعات پایگاه دانش داخلی (در صورت ربط، بر اساس آن پاسخ بده):\n" + KnowledgeBase.asContext()));
+        msgs.put(new JSONObject().put("role", "system").put("content", SYSTEM_PROMPT + langHint + "\n\nاطلاعات پایگاه دانش داخلی (در صورت ربط، بر اساس آن پاسخ بده):\n" + KnowledgeBase.asContext()));
         for (Message m : history) {
             msgs.put(new JSONObject()
                     .put("role", m.fromUser ? "user" : "assistant")

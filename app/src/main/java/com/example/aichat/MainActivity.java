@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,9 +27,9 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_CONVERSATION_ID = "conversation_id";
-    private static final String DEFAULT_URL = "https://api.together.ai/v1/chat/completions";
-    private static final String DEFAULT_KEY = "dahl_GxSwCZGe12r1uaSCESZF9cdrRhKKoVkw9";
-    private static final String DEFAULT_MODEL = "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo";
+    static final String DEFAULT_URL = "https://api.together.ai/v1/chat/completions";
+    static final String DEFAULT_KEY = "dahl_GxSwCZGe12r1uaSCESZF9cdrRhKKoVkw9";
+    static final String DEFAULT_MODEL = "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo";
 
     private final List<Message> messages = new ArrayList<>();
     private ChatAdapter adapter;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private View sendBtn;
     private SharedPreferences prefs;
     private DrawerLayout drawer;
+    private View homePanel;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler ui = new Handler(Looper.getMainLooper());
     private String conversationId;
@@ -83,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         sendBtn.setOnClickListener(v -> send());
+        setupHome();
+        BottomNav.setup(this, findViewById(R.id.bottom_nav), R.id.nav_home);
+        updateMode();
     }
 
     private void setupDrawer(String currentUser) {
@@ -100,6 +105,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /** Home-screen shortcuts. Features without a backend show a clear "not available yet" message. */
+    private void setupHome() {
+        homePanel = findViewById(R.id.home_panel);
+        findViewById(R.id.notif_btn).setOnClickListener(v -> startActivity(new Intent(this, TaskActivity.class)));
+        findViewById(R.id.mic_btn).setOnClickListener(v -> Toast.makeText(this, R.string.voice_coming_soon, Toast.LENGTH_SHORT).show());
+        findViewById(R.id.q_call).setOnClickListener(v -> Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show());
+        findViewById(R.id.q_message).setOnClickListener(v -> Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show());
+        findViewById(R.id.q_apps).setOnClickListener(v -> Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show());
+        findViewById(R.id.q_reminder).setOnClickListener(v -> startActivity(new Intent(this, TaskActivity.class)));
+        findViewById(R.id.q_ai).setOnClickListener(v -> input.requestFocus());
+        findViewById(R.id.q_more).setOnClickListener(v -> drawer.openDrawer(GravityCompat.START));
+        findViewById(R.id.recent_card).setOnClickListener(v -> startActivity(new Intent(this, HistoryActivity.class)));
+        findViewById(R.id.see_all).setOnClickListener(v -> startActivity(new Intent(this, HistoryActivity.class)));
+    }
+
+    /** Shows the home hero until the conversation has real messages, then the chat list. */
+    private void updateMode() {
+        if (homePanel == null) return;
+        boolean chatting = messages.size() > 1;
+        homePanel.setVisibility(chatting ? View.GONE : View.VISIBLE);
+        recycler.setVisibility(chatting ? View.VISIBLE : View.GONE);
+    }
+
     private void send() {
         final String q = input.getText().toString().trim();
         if (q.isEmpty()) return;
@@ -108,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         messages.add(new Message(q, true));
         final Message typing = new Message(getString(R.string.typing), false);
         messages.add(typing);
+        updateMode();
         adapter.notifyItemRangeInserted(messages.size() - 2, 2);
         scrollToEnd();
         sendBtn.setEnabled(false);
@@ -158,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     /** Shared by the sidebar and the overflow menu. */
     private boolean handleAction(int id) {
         if (id == R.id.nav_settings) {
-            showSettings();
+            startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_new_chat) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -176,27 +205,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    private void showSettings() {
-        View v = getLayoutInflater().inflate(R.layout.dialog_settings, null);
-        final EditText etUrl = v.findViewById(R.id.et_url);
-        final EditText etKey = v.findViewById(R.id.et_key);
-        final EditText etModel = v.findViewById(R.id.et_model);
-        etUrl.setText(getSetting("url", DEFAULT_URL));
-        etKey.setText(getSetting("key", DEFAULT_KEY));
-        etModel.setText(getSetting("model", DEFAULT_MODEL));
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.settings)
-                .setView(v)
-                .setPositiveButton(R.string.save, (d, w) -> prefs.edit()
-                        .putString("url", etUrl.getText().toString().trim())
-                        .putString("key", etKey.getText().toString().trim())
-                        .putString("model", etModel.getText().toString().trim())
-                        .apply())
-                .setNegativeButton(R.string.cancel, null)
-                .show();
     }
 
 

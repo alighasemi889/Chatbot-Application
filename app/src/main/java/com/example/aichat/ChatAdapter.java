@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,14 +27,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
 
     static class VH extends RecyclerView.ViewHolder {
         final LinearLayout root;
+        final LinearLayout column;
         final TextView text;
         final ImageButton copy;
+        final ImageView botAvatar;
+        final ImageView userAvatar;
 
         VH(View v) {
             super(v);
             root = v.findViewById(R.id.root);
+            column = v.findViewById(R.id.column);
             text = v.findViewById(R.id.text);
             copy = v.findViewById(R.id.copy);
+            botAvatar = v.findViewById(R.id.bot_avatar);
+            userAvatar = v.findViewById(R.id.user_avatar);
         }
     }
 
@@ -50,13 +57,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
         Message m = items.get(position);
         h.text.setText(MessageFormatter.format(m.text, ctx.getColor(R.color.code_bg)));
 
-        // Bot bubbles are plain text; user bubbles get the tinted pill.
+        // User messages sit on the right with the user avatar; bot messages on the left with the sparkle avatar.
         h.text.setBackgroundResource(m.fromUser ? R.drawable.bubble_user : R.drawable.bubble_bot);
-        h.root.setGravity(m.fromUser ? Gravity.END : Gravity.START);
+        h.column.setGravity(m.fromUser ? Gravity.END : Gravity.START);
+        h.botAvatar.setVisibility(m.fromUser ? View.GONE : View.VISIBLE);
+        h.userAvatar.setVisibility(m.fromUser ? View.VISIBLE : View.GONE);
 
         boolean typing = !m.fromUser && ctx.getString(R.string.typing).equals(m.text);
-        boolean showCopy = !m.fromUser && !typing;
-        h.copy.setVisibility(showCopy ? View.VISIBLE : View.GONE);
+        h.copy.setVisibility(!m.fromUser && !typing ? View.VISIBLE : View.GONE);
 
         View.OnClickListener copyAction = v -> {
             ClipboardManager cm = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);

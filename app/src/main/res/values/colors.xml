@@ -1,19 +1,19 @@
 <resources>
-    <color name="primary">#6D4DE0</color>
-    <color name="primary_dark">#5638C4</color>
-    <color name="bg">#F7F6FB</color>
+    <color name="primary">#5B52F0</color>
+    <color name="primary_dark">#4338CA</color>
+    <color name="bg">#F5F5FB</color>
     <color name="surface">#FFFFFF</color>
-    <color name="surface_alt">#EFEDF6</color>
-    <color name="bg_light">#F7F6FB</color>
-    <color name="bg_dark">#1B1B20</color>
-    <color name="user_bubble">#ECE9F7</color>
+    <color name="surface_alt">#ECEDF8</color>
+    <color name="bg_light">#F5F5FB</color>
+    <color name="bg_dark">#0A0A12</color>
+    <color name="user_bubble">#E4E6FF</color>
     <color name="bot_bubble_light">#FFFFFF</color>
-    <color name="bot_bubble_dark">#F7F6FB</color>
-    <color name="text_dark">#17161F</color>
+    <color name="bot_bubble_dark">#ECEDF8</color>
+    <color name="text_dark">#14142A</color>
     <color name="text_light">#FFFFFF</color>
-    <color name="text_muted">#6F6C80</color>
-    <color name="border_light">#E2DFEE</color>
-    <color name="border_dark">#E2DFEE</color>
-    <color name="code_bg">#EFEDF6</color>
+    <color name="text_muted">#6E6E88</color>
+    <color name="border_light">#DEDFF0</color>
+    <color name="border_dark">#DEDFF0</color>
+    <color name="code_bg">#ECEDF8</color>
     <color name="error">#D93A46</color>
 </resources>

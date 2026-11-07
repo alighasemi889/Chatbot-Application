@@ -79,4 +79,28 @@
     <string name="version_unknown">نسخه نامشخص</string>
     <string name="nav_header_user">کاربر: %s</string>
     <string name="copy_reply">کپی پاسخ</string>
+
+    <string name="greeting">سلام، عبدالله 👋</string>
+    <string name="greeting_sub">امروز چطور می‌توانم کمکتان کنم؟</string>
+    <string name="voice_input">ورودی صوتی</string>
+    <string name="voice_coming_soon">ورودی صوتی هنوز فعال نیست</string>
+    <string name="coming_soon">این قابلیت هنوز فعال نیست</string>
+    <string name="q_call">تماس</string>
+    <string name="q_message">پیام</string>
+    <string name="q_apps">برنامه‌ها</string>
+    <string name="q_reminder">یادآور</string>
+    <string name="q_ai">پرسش از AI</string>
+    <string name="q_more">بیشتر</string>
+    <string name="recent_activity">فعالیت‌های اخیر</string>
+    <string name="see_all">مشاهده همه</string>
+    <string name="recent_chats">گفتگوهای قبلی</string>
+    <string name="recent_chats_sub">مشاهده تاریخچه گفتگوها</string>
+    <string name="nav_home">خانه</string>
+    <string name="nav_chat">گفتگو</string>
+    <string name="nav_tools">ابزارها</string>
+    <string name="nav_tasks_desc">یادآورها</string>
+    <string name="api_settings">تنظیمات API</string>
+    <string name="appearance">نمایش</string>
+    <string name="appearance_dark">تیره</string>
+    <string name="back">بازگشت</string>
 </resources>
